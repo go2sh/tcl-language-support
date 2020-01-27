@@ -1,0 +1,58 @@
+{
+  "name": "tcl-language-support",
+  "displayName": "TCL Language Support",
+  "description": "Language support for TCL",
+  "version": "0.0.1",
+  "publisher": "go2sh",
+  "repository": "https://github.com/go2sh/tcl-language-support",
+  "engines": {
+    "vscode": "^1.41.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "tcl",
+        "aliases": [
+          "TCL",
+          "Xilinx Constraints File",
+          "Synopsis Constraints File"
+        ],
+        "extensions": [
+          ".tcl",
+          ".sdc",
+          ".xdc"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "tcl",
+        "scopeName": "source.tcl",
+        "path": "./syntaxes/tcl.tmLanguage"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "tcl",
+        "path": "./snippets/tcl.json"
+      }
+    ]
+  },
+  "scripts": {
+    "build:grammar": "ts-node --files ./scripts/build.ts"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^3.12.1",
+    "@types/node": "^13.5.0",
+    "@types/plist": "^3.0.2",
+    "js-yaml": "^3.13.1",
+    "plist": "^3.0.1",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  }
+}
