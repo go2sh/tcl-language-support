@@ -1,2 +1,3 @@
 syntaxes/*.tmLanguage
 node_modules/
+*.vsix
