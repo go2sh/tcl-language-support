@@ -44,6 +44,7 @@
     ]
   },
   "scripts": {
+    "vscode:prepublish": "npm run build:grammar",
     "build:grammar": "ts-node --files ./scripts/build.ts"
   },
   "devDependencies": {
