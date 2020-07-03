@@ -204,19 +204,28 @@ repository:
               - include: "#expr_braces"
               - begin: "{{word_end}}"
                 end: "{{command_end}}"
+                endCaptures:
+                  "1": { name: punctuation.end.semicolon.tcl }
                 patterns:
                   - include: "#double_quotes"
                   - include: "#brackets"
                   - include: "#tcl_braces"
                   - begin: "{{word_end}}"
                     end: "{{command_end}}"
+                    endCaptures:
+                      "1": { name: punctuation.end.semicolon.tcl }
                     patterns:
-                      - name: keyword.control.else.tcl 
-                        begin: \b(else)\b
+                      - begin: \b(else)\b
+                        beginCaptures:
+                          "1": { name: "keyword.control.else.tcl" }
                         end: "{{command_end}}"
+                        endCaptures:
+                          "1": { name: punctuation.end.semicolon.tcl }
                         patterns:
                           - begin: "{{word_end}}"
                             end: "{{command_end}}"
+                            endCaptures:
+                              "1": { name: punctuation.end.semicolon.tcl }
                             patterns:
                               - include: "#double_quotes"
                               - include: "#brackets"
