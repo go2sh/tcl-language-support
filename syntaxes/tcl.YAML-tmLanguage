@@ -5,6 +5,8 @@ fileTypes: [tcl, xdc, sdc]
 uuid: 45aff42e-4fcd-4717-829b-4cdaf9d707aa
 
 variables:
+  word_end: (?:\s+|\\)
+  command_end: (?:(;)|(?=\})|(?=\])|$)
 
 patterns:
   - include: "#comment"
@@ -14,7 +16,7 @@ repository:
   comment:
     patterns:
       - name: comment.line.tcl
-        match: \s*\#.+
+        match: \s*\#.*
 
   command:
     patterns:
@@ -42,7 +44,7 @@ repository:
 
   variable:
     patterns:
-      - begin: (\$(?:(?:\:\:)?[a-zA-Z0-9_]+))\(
+      - begin: (\$(?:(?:\:\:)?[a-zA-Z0-9_]+)+)\(
         beginCaptures:
           "1": { name: variable.other.tcl }
         end: \)
@@ -50,21 +52,23 @@ repository:
           - include: "#brackets"
           - include: "#variable"
       - name: variable.other.tcl
-        match: \$(?:(?:\:\:)?[a-zA-Z0-9_]+)
+        match: \$(?:(?:\:\:)?[a-zA-Z0-9_]+)+
       - name: variable.other.tcl
         begin: '\$\{'
         end: \}
 
   braces:
     patterns:
-      - begin: \{
+      - name: meta.word.generic.tcl
+        begin: \{
         end: \}
         patterns:
           - include: "#braces"
 
   tcl_braces:
     patterns:
-      - begin: \{
+      - name: meta.word.tcl.tcl
+        begin: \{
         end: \}
         patterns:
           - include: "#comment"
@@ -72,7 +76,8 @@ repository:
 
   expr_braces:
     patterns:
-      - begin: \{
+      - name: meta.word.expr.tcl
+        begin: \{
         end: \}
         patterns:
           - include: "#expression"
@@ -170,7 +175,7 @@ repository:
 
   default_command:
     patterns:
-      - begin: (\S+)
+      - begin: (?:([^\{\}\[\]\$\;\s]+)|(?=\{|\[|\$|\"))
         beginCaptures:
           "1": { name: entity.name.function.tcl }
         end: (?:(;)|(?=\})|(?=\])|$)
