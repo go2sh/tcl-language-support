@@ -93,77 +93,189 @@ repository:
   proc:
     patterns:
       - name: meta.command.proc.tcl
-        begin: (proc)
+        begin: \b(proc)\b
         beginCaptures:
           "1": { name: storage.type.function.tcl }
-        end: (?:(;)|(?=\})|(?=\])|$)
+        end: "{{command_end}}"
         endCaptures:
           "1": { name: punctuation.end.semicolon.tcl }
         patterns:
-          - match: '(?:"([^"]+)"|\{([^}]+)\}|([^\{\"\s]+)\b)\s*(?:"([^"]+)"|\{([^}]+)\}|([^\{\"\s]+)\b)'
-            captures:
-              "1": { name: entity.name.function.tcl }
-              "2": { name: entity.name.function.tcl }
-              "3": { name: entity.name.function.tcl }
-              "4": { name: variable.parameter.tcl }
-              "5": { name: variable.parameter.tcl }
-              "6": { name: variable.parameter.tcl }
-          - include: "#double_quotes"
-          - include: "#brackets"
-          - include: "#tcl_braces"
+          - begin: (?<=proc){{word_end}}
+            end: "{{command_end}}"
+            patterns:
+              - name: entity.name.function.tcl
+                match:  '[^\"\$\[\s]+'
+              - include: "#double_quotes"
+              - include: "#brackets"
+              - include: "#braces"
+              - begin: "{{word_end}}"
+                end: "{{command_end}}"
+                patterns:
+                  - include: "#double_quotes"
+                  - include: "#brackets"
+                  - include: '#braces'
+                  - begin: "{{word_end}}"
+                    end: "{{command_end}}"
+                    patterns:
+                    - include: "#double_quotes"
+                    - include: "#brackets"
+                    - include: "#tcl_braces"
   for:
     patterns:
       - name: meta.command.for.tcl
-        begin: (for)
+        begin: \b(for)\b
         beginCaptures:
           "1": { name: keyword.control.for.tcl }
-        end: (?:(;)|(?=\})|(?=\])|$)
+        end: "{{command_end}}"
         endCaptures:
           "1": { name: punctuation.end.semicolon.tcl }
         patterns:
-          - begin: '(?=\{)(?=(?:.+?\{){3})'
-            end: '(?<=\})'
+          - begin: "{{word_end}}"
+            end: "{{command_end}}"
             patterns:
+              - include: "#double_quotes"
+              - include: "#brackets"
               - include: "#tcl_braces"
-          - begin: '(?=\{)(?=(?:.+?\{){2})'
-            end: '(?<=\})'
+              - begin: "{{word_end}}"
+                end: "{{command_end}}"
+                patterns:
+                  - include: "#double_quotes"
+                  - include: "#brackets"
+                  - include: "#expr_braces"
+                  - begin: "{{word_end}}"
+                    end: "{{command_end}}"
+                    patterns:
+                      - include: "#double_quotes"
+                      - include: "#brackets"
+                      - include: "#tcl_braces"
+                      - begin: "{{word_end}}"
+                        end: "{{command_end}}"
+                        patterns:
+                          - include: "#double_quotes"
+                          - include: "#brackets"
+                          - include: "#tcl_braces"
+  
+  foreach:
+    patterns:
+      - name: meta.command.foreach.tcl
+        begin: \b(foreach)\b
+        beginCaptures:
+          "1": { name: keyword.control.foreach.tcl }
+        end: "{{command_end}}"
+        endCaptures:
+          "1": { name: punctuation.end.semicolon.tcl }
+        patterns:
+          - begin: "{{word_end}}"
+            end: "{{command_end}}"
             patterns:
-              - include: "#expr_braces"
-          - begin: '(?=\{)(?=(?:.+?\{){1})'
-            end: '(?<=\})'
-            patterns:
-              - include: "#tcl_braces"
-          - begin: '(?=\{)'
-            end: '(?<=\})'
-            patterns:
-              - include: "#tcl_braces"
-          - include: "#brackets"
-          - include: "#braces"
+              - name: variable.parameter.tcl
+                match: \S+
+              - include: "#double_quotes"
+              - include: "#brackets"
+              - include: "#braces"
+              - begin: "{{word_end}}"
+                end: "{{command_end}}"
+                patterns:
+                  - include: "#variable"
+                  - include: "#double_quotes"
+                  - include: "#brackets"
+                  - include: "#braces"
+                  - begin: "{{word_end}}"
+                    end: "{{command_end}}"
+                    patterns:
+                      - include: "#double_quotes"
+                      - include: "#brackets"
+                      - include: "#tcl_braces"
   if:
     patterns:
-      - name: meta.command.for.tcl
-        begin: (if)
+      - name: meta.command.if.tcl
+        begin: \b(if)\b
         beginCaptures:
           "1": { name: keyword.control.if.tcl }
+        end: "{{command_end}}"
+        endCaptures:
+          "1": { name: punctuation.end.semicolon.tcl }
+        patterns:
+          - begin: "{{word_end}}"
+            end: "{{command_end}}"
+            patterns:
+              - include: "#double_quotes"
+              - include: "#brackets"
+              - include: "#expr_braces"
+              - begin: "{{word_end}}"
+                end: "{{command_end}}"
+                patterns:
+                  - include: "#double_quotes"
+                  - include: "#brackets"
+                  - include: "#tcl_braces"
+
+  while:
+    patterns:
+      - name: meta.command.while.tcl
+        begin: \b(while)\b
+        beginCaptures:
+          "1": { name: keyword.control.while.tcl }
+        end: "{{command_end}}"
+        endCaptures:
+          "1": { name: punctuation.end.semicolon.tcl }
+        patterns:
+          - begin: "{{word_end}}"
+            end: "{{command_end}}"
+            patterns:
+              - include: "#double_quotes"
+              - include: "#brackets"
+              - include: "#expr_braces"
+              - begin: "{{word_end}}"
+                end: "{{command_end}}"
+                patterns:
+                  - include: "#double_quotes"
+                  - include: "#brackets"
+                  - include: "#tcl_braces"
+
+  break:
+    patterns:
+      - name: meta.command.break.tcl
+        begin: \b(break)\b
+        beginCaptures:
+          "1": { name: keyword.control.break.tcl }
+        end: "{{word_end}}"
+        endCaptures:
+          "1": { name: punctuation.end.semicolon.tcl }
+
+  continue:
+    patterns:
+      - name: meta.command.continue.tcl
+        begin: \b(continue)\b
+        beginCaptures:
+          "1": { name: keyword.control.continue.tcl }
+        end: "{{word_end}}"
+        endCaptures:
+          "1": { name: punctuation.end.semicolon.tcl }
+
+  namespace:
+    patterns:
+      - name: meta.command.namespace.tcl
+        begin: \b(namespace)\b
+        beginCaptures:
+          "1": { name: support.function.namespace.tcl }
         end: (?:(;)|(?=\})|(?=\])|$)
         endCaptures:
           "1": { name: punctuation.end.semicolon.tcl }
         patterns:
-          - begin: '(?=\{)(?=(?:.+?\{))'
-            end: '(?<=\})'
+          - begin: (eval)
+            beginCaptures:
+              "1": { name: support.constant.eval.tcl }
+            end: "{{command_end}}"
             patterns:
-              - include: "#expr_braces"
-          - begin: '(?=\{)'
-            end: '(?<=\})'
-            patterns:
-              - include: "#tcl_braces"
-          - include: "#brackets"
-          - include: "#braces"
+              - include: '#tcl_braces'
+              - include: "#variable"
+              - include: "#double_quotes"
+              - include: "#brackets"
 
   expr:
     patterns:
       - name: meta.command.expr.tcl
-        begin: (expr)
+        begin: \b(expr)\b
         beginCaptures:
           "1": { name: support.function.expr.tcl }
         end: (?:(;)|(?=\})|(?=\])|$)
@@ -173,6 +285,77 @@ repository:
           - include: "#expr_braces"
           - include: "#expression"
 
+  dict:
+    patterns:
+      - name: meta.command.dict.tcl
+        begin: \b(dict)\b
+        beginCaptures:
+          "1": { name: support.function.dict.tcl }
+        end: "{{command_end}}"
+        endCaptures:
+          "1": { name: punctuation.end.semicolon.tcl }
+        patterns:
+          - begin: \b(?:for)\b
+            end: "{{command_end}}"
+            endCaptures:
+              "1": { name: punctuation.end.semicolon.tcl }
+            patterns:
+              - begin: "{{word_end}}"
+                end: "{{command_end}}"
+                endCaptures:
+                  "1": { name: punctuation.end.semicolon.tcl }
+                patterns:
+                  - include: "#double_quotes"
+                  - include: "#braces"
+                  - begin: "{{word_end}}"
+                    end: "{{command_end}}"
+                    endCaptures:
+                      "1": { name: punctuation.end.semicolon.tcl }
+                    patterns:
+                      - include: "#variable"
+                      - include: "#double_quotes"
+                      - include: "#braces"
+                      - begin: "{{word_end}}"
+                        end: "{{command_end}}"
+                        endCaptures:
+                          "1": { name: punctuation.end.semicolon.tcl }
+                        patterns:
+                          - include: "#double_quotes"
+                          - include: "#brackets"
+                          - include: "#tcl_braces"
+          - begin: \b(?:map)\b
+            end: "{{command_end}}"
+            endCaptures:
+              "1": { name: punctuation.end.semicolon.tcl }
+            patterns:
+              - begin: "{{word_end}}"
+                end: "{{command_end}}"
+                endCaptures:
+                  "1": { name: punctuation.end.semicolon.tcl }
+                patterns:
+                  - include: "#double_quotes"
+                  - include: "#braces"
+                  - begin: "{{word_end}}"
+                    end: "{{command_end}}"
+                    endCaptures:
+                      "1": { name: punctuation.end.semicolon.tcl }
+                    patterns:
+                      - include: "#variable"
+                      - include: "#double_quotes"
+                      - include: "#braces"
+                      - begin: "{{word_end}}"
+                        end: "{{command_end}}"
+                        endCaptures:
+                          "1": { name: punctuation.end.semicolon.tcl }
+                        patterns:
+                          - include: "#double_quotes"
+                          - include: "#brackets"
+                          - include: "#tcl_braces"
+          - include: "#variable"
+          - include: "#double_quotes"
+          - include: "#brackets"
+          - include: "#braces"
+        
   default_command:
     patterns:
       - begin: (?:([^\{\}\[\]\$\;\s]+)|(?=\{|\[|\$|\"))
@@ -191,5 +374,11 @@ repository:
     patterns:
       - include: "#proc"
       - include: "#for"
+      - include: "#foreach"
       - include: "#if"
+      - include: "#while"
+      - include: "#break"
+      - include: "#continue"
+      - include: '#namespace'
       - include: "#expr"
+      - include: "#dict"
