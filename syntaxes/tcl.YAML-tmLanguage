@@ -104,7 +104,7 @@ repository:
             end: "{{command_end}}"
             patterns:
               - name: entity.name.function.tcl
-                match:  '[^\"\$\[\s]+'
+                match: '[^\"\$\[\s]+'
               - include: "#double_quotes"
               - include: "#brackets"
               - include: "#braces"
@@ -113,13 +113,13 @@ repository:
                 patterns:
                   - include: "#double_quotes"
                   - include: "#brackets"
-                  - include: '#braces'
+                  - include: "#braces"
                   - begin: "{{word_end}}"
                     end: "{{command_end}}"
                     patterns:
-                    - include: "#double_quotes"
-                    - include: "#brackets"
-                    - include: "#tcl_braces"
+                      - include: "#double_quotes"
+                      - include: "#brackets"
+                      - include: "#tcl_braces"
   for:
     patterns:
       - name: meta.command.for.tcl
@@ -154,7 +154,7 @@ repository:
                           - include: "#double_quotes"
                           - include: "#brackets"
                           - include: "#tcl_braces"
-  
+
   foreach:
     patterns:
       - name: meta.command.foreach.tcl
@@ -289,7 +289,7 @@ repository:
               "1": { name: support.constant.eval.tcl }
             end: "{{command_end}}"
             patterns:
-              - include: '#tcl_braces'
+              - include: "#tcl_braces"
               - include: "#variable"
               - include: "#double_quotes"
               - include: "#brackets"
@@ -377,7 +377,7 @@ repository:
           - include: "#double_quotes"
           - include: "#brackets"
           - include: "#braces"
-        
+
   default_command:
     patterns:
       - begin: (?:([^\{\}\[\]\$\;\s]+)|(?=\{|\[|\$|\"))
@@ -401,6 +401,6 @@ repository:
       - include: "#while"
       - include: "#break"
       - include: "#continue"
-      - include: '#namespace'
+      - include: "#namespace"
       - include: "#expr"
       - include: "#dict"
