@@ -2,7 +2,7 @@
   "name": "tcl-language-support",
   "displayName": "TCL Language Support",
   "description": "Language support for TCL",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "publisher": "go2sh",
   "repository": "https://github.com/go2sh/tcl-language-support",
   "engines": {
