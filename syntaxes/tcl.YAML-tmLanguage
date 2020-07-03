@@ -208,6 +208,19 @@ repository:
                   - include: "#double_quotes"
                   - include: "#brackets"
                   - include: "#tcl_braces"
+                  - begin: "{{word_end}}"
+                    end: "{{command_end}}"
+                    patterns:
+                      - name: keyword.control.else.tcl 
+                        begin: \b(else)\b
+                        end: "{{command_end}}"
+                        patterns:
+                          - begin: "{{word_end}}"
+                            end: "{{command_end}}"
+                            patterns:
+                              - include: "#double_quotes"
+                              - include: "#brackets"
+                              - include: "#tcl_braces"
 
   while:
     patterns:
