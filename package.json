@@ -52,7 +52,7 @@
     "@types/node": "^13.5.0",
     "@types/plist": "^3.0.2",
     "js-yaml": "^3.13.1",
-    "plist": "^3.0.1",
+    "plist": "^3.0.5",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
   }
